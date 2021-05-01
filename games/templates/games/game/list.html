@@ -25,7 +25,7 @@
                     <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
                 </a>
                 <a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
-                <br>
+
                 {{ game.title }}
             </div>
         {% endfor %}
