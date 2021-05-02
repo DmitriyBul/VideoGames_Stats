@@ -57,3 +57,10 @@ class Game(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super(Game, self).save(*args, **kwargs)
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    wished_item = models.ForeignKey(Game, on_delete=models.CASCADE)
+    slug = models.CharField(max_length=30, null=True, blank=True)
+

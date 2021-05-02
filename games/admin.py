@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Category
+from .models import Game, Category, Wishlist
 
 
 @admin.register(Category)
@@ -14,3 +14,8 @@ class GameAdmin(admin.ModelAdmin):
     list_filter = ['year', 'created']
     # list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('title',)}
+
+
+@admin.register(Wishlist)
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ['wished_item']

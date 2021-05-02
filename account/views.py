@@ -1,18 +1,22 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
+
+from games.models import Wishlist
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.contrib import messages
+from games.models import Game
+
 
 @login_required
 def edit(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
         profile_form = ProfileEditForm(instance=request.user.profile,
-                                   data=request.POST,
-                                   files=request.FILES)
+                                       data=request.POST,
+                                       files=request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -28,7 +32,9 @@ def edit(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
+    games = Game.objects.filter(profile=request.user.profile)
+
+    return render(request, 'account/dashboard.html', {'section': 'dashboard', 'games': games})
 
 
 def register(request):
@@ -40,8 +46,9 @@ def register(request):
             # Задаем пользователю зашифрованный пароль.
             new_user.set_password(user_form.cleaned_data['password'])
             # Сохраняем пользователя в базе данных.
-            Profile.objects.create(user=new_user)
             new_user.save()
+            Profile.objects.create(user=new_user)
+            #new_user.save()
             return render(request,
                           'account/register_done.html',
                           {'new_user': new_user})

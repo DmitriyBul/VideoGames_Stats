@@ -6,4 +6,18 @@
         You can <a href="{% url "edit" %}">edit your profile</a> or
         <a href="{% url "password_change" %}">change your password</a>.
     </p>
+    <div id="main" class="product-list">
+        <h1>{% if category %}{{ category.name }}{% else %}Games{% endif %}</h1>
+        {% for game in games %}
+            <div class="item">
+                <a href="{{ game.get_absolute_url }}">
+                    <img src="
+                            {% if game.image %}{{ game.image.url }}{% else %}{% endif %}">
+                </a>
+                <a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
+
+                {{ game.title }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

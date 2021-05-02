@@ -10,7 +10,8 @@
         <h2>
             <a href="{{ game.category.get_absolute_url }}">{{ game.category }}</a>
         </h2>
-        <p class="price">${{ game.year }}</p>
+        <p class="price">{{ game.year }}</p>
         {{ game.description|linebreaks }}
+    <a href="{% url 'games:add_game' game.id %}">ADD</a>
     </div>
 {% endblock %}
