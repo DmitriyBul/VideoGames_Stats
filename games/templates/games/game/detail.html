@@ -13,5 +13,7 @@
         <p class="price">{{ game.year }}</p>
         {{ game.description|linebreaks }}
     <a href="{% url 'games:add_game' game.id %}">ADD</a>
+    <br>
+    <a href="{% url 'games:delete_game' game.id %}">Remove from list</a>
     </div>
 {% endblock %}

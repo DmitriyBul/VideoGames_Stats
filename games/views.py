@@ -37,6 +37,16 @@ def add_game(request, id):
     return render(request, 'games/game/success.html', {'game': game})
 
 
+@login_required
+def delete_game(request, id):
+    game = get_object_or_404(Game, id=id)
+    user = User.objects.get(id=request.user.id)
+    profile = Profile.objects.filter(user=user).get()
+    profile.games.remove(game)
+    wished_item = Wishlist.objects.filter(wished_item=game, user=request.user).delete()
+    return render(request, 'games/game/success.html', {'game': game})
+
+
 def games_search(request):
     form = SearchForm()
     query = None
