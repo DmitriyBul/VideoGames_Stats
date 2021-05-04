@@ -14,6 +14,9 @@
             <li {% if section == "dashboard" %} class="selected"{% endif %}>
                 <a href="{% url "dashboard" %}">My dashboard</a>
             </li>
+        <li {% if section == "dashboard" %} class="selected"{% endif %}>
+                <a href="{% url "games:games_search" %}">Search games</a>
+            </li>
         </ul>
     {% endif %}
     <span class="user">

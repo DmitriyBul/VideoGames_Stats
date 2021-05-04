@@ -9,19 +9,6 @@
 <body>
 <div id="header">
     <span class="logo">Games</span>
-    {% if request.user.is_authenticated %}
-        <ul class="menu">
-            <li {% if section == "dashboard" %} class="selected"{% endif %}>
-                <a href="{% url "dashboard" %}">My dashboard</a>
-            </li>
-            <li {% if section == "images" %}class="selected"{% endif %}>
-                <a href="#">Images</a>
-            </li>
-            <li {% if section == "people" %}class="selected"{% endif %}>
-                <a href="#">People</a>
-            </li>
-        </ul>
-    {% endif %}
     <span class="user">
 {% if request.user.is_authenticated %}
     Hello {{ request.user.first_name }},
@@ -30,6 +17,16 @@
     <a href="{% url "login" %}">Log-in</a>
 {% endif %}
 </span>
+    {% if request.user.is_authenticated %}
+        <ul class="menu">
+            <li {% if section == "dashboard" %} class="selected"{% endif %}>
+                <a href="{% url "games:game_list" %}">Main page</a>
+            </li>
+            <li {% if section == "dashboard" %} class="selected"{% endif %}>
+                <a href="{% url "dashboard" %}">My dashboard</a>
+            </li>
+        </ul>
+    {% endif %}
 </div>
 {% if messages %}
     <ul class="messages">
