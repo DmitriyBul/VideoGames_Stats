@@ -22,12 +22,18 @@
         {% for game in games %}
             <div class="item">
                 <a href="{{ game.get_absolute_url }}">
-                    <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+                    <img src="
+                            {% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
                 </a>
                 <a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
 
                 {{ game.title }}
             </div>
         {% endfor %}
+    </div>
+    <div id="main" class="product-list">
+    {% include "games/game/../pagination.html" with page=games %}
+    <br>
+    <br>
     </div>
 {% endblock %}

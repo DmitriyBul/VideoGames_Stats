@@ -7,6 +7,7 @@ from games.forms import SearchForm, GameCreationForm
 from .models import Category, Game, Wishlist
 from account.models import Profile
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def game_list(request, category_slug=None):
@@ -16,8 +17,18 @@ def game_list(request, category_slug=None):
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         games = games.filter(category=category)
+    paginator = Paginator(games, 6)
+    page = request.GET.get('page')
+    try:
+        games = paginator.page(page)
+    except PageNotAnInteger:
+        # Если страница не является целым числом, возвращаем первую страницу.
+        games = paginator.page(1)
+    except EmptyPage:
+        # Если номер страницы больше, чем общее количество страниц, возвращаем последнюю.
+        games = paginator.page(paginator.num_pages)
     return render(request, 'games/game/list.html',
-                  {'category': category,
+                  {'page': page, 'category': category,
                    'categories': categories,
                    'games': games})
 
