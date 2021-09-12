@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 
-from games.forms import SearchForm, GameCreationForm
-from .models import Category, Game, Wishlist
+from games.forms import SearchForm, GameCreationForm, CommentForm
+from .models import Category, Game, Wishlist, Comment
 from account.models import Profile
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -33,9 +33,27 @@ def game_list(request, category_slug=None):
                    'games': games})
 
 
+@login_required()
 def game_detail(request, id, slug):
     game = get_object_or_404(Game, id=id, slug=slug)
-    return render(request, 'games/game/detail.html', {'game': game})
+    user = User.objects.get(id=request.user.id)
+    comments = game.comments.filter(active=True)
+    new_comment = None
+    if request.method == 'POST':
+        # Комментарий был опубликован
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            # Создайте объект Comment, но пока не сохраняйте в базу данных
+            new_comment = comment_form.save(commit=False)
+            # Назначить текущий пост комментарию
+            new_comment.game = game
+            new_comment.user = user
+            # Сохранить комментарий в базе данных
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+    return render(request, 'games/game/detail.html', {'game': game, 'comments': comments,
+                                                      'new_comment': new_comment, 'comment_form': comment_form})
 
 
 @login_required
@@ -44,7 +62,7 @@ def add_game(request, id):
     user = User.objects.get(id=request.user.id)
     profile = Profile.objects.filter(user=user).get()
     profile.games.add(game)
-    wished_item = Wishlist.objects.get_or_create(wished_item=game, user=request.user)
+    #wished_item = Wishlist.objects.get_or_create(wished_item=game, user=request.user)
     return render(request, 'games/game/success.html', {'game': game})
 
 

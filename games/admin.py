@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Category, Wishlist
+from .models import Game, Category, Wishlist, Comment
 
 
 @admin.register(Category)
@@ -19,3 +19,10 @@ class GameAdmin(admin.ModelAdmin):
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):
     list_display = ['wished_item']
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'game', 'created', 'active')
+    list_filter = ('active', 'created', 'updated')
+    search_fields = ('user', 'game', 'body')

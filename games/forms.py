@@ -1,5 +1,5 @@
 from django import forms
-from .models import Game
+from .models import Game, Comment
 
 
 class SearchForm(forms.Form):
@@ -12,3 +12,10 @@ class GameCreationForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = ('category', 'title', 'image', 'description', 'year')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('body', )
+

@@ -64,3 +64,17 @@ class Wishlist(models.Model):
     wished_item = models.ForeignKey(Game, on_delete=models.CASCADE)
     slug = models.CharField(max_length=30, null=True, blank=True)
 
+
+class Comment(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.user, self.game)
